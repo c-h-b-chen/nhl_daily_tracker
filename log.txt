@@ -1,0 +1,96 @@
+
+========Scraping For=======
+2019-10-04 16:14:16.002495
+=======Scraping For=======
+2019-10-08 16:20:52.774341
+
+2019-10-08 16:20:59.958276
+======Program End======
+
+=======Scraping For=======
+2019-10-08 16:23:57.347570
+
+2019-10-08 16:23:59.796608
+======Program End======
+
+=======Scraping For=======
+2019-10-08 16:24:04.960789
+ValueError:invalid literal for int() with base 10: ''* Possible bad int conversion *
+=======Scraping For=======
+2019-10-08 16:34:50.136766
+ValueError:invalid literal for int() with base 10: ''* Possible bad int conversion *
+=======Scraping For=======
+2019-10-08 16:37:03.710803
+ValueError:invalid literal for int() with base 10: ''* Possible bad int conversion *
+=======Scraping For=======
+2019-10-08 16:39:38.861761
+ValueError:invalid literal for int() with base 10: ''* Possible bad int conversion *
+=======Scraping For=======
+2019-10-08 16:42:04.164328
+ValueError:invalid literal for int() with base 10: ''* Possible bad int conversion *
+=======Scraping For=======
+2019-10-08 19:24:10.657045
+
+2019-10-08 19:24:14.449086
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:02:43.736553
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:02:51.451157
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:05:03.036980
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:05:06.031889
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:09:40.500422
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:09:43.528997
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:13:36.403922
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:13:39.574445
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:15:03.018173
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:15:07.516166
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:21:48.201880
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:21:51.356120
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:28:07.847360
+TypeError:Invalid argument(s) 'charset' sent to create_engine(), using configuration MySQLDialect_pymysql/QueuePool/Engine.  Please check that the keyword arguments are appropriate for this combination of components.Unable to connect into database
+2019-10-10 00:28:09.304714
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:28:24.756437
+UnicodeEncodeError
+Unable to insert into database
+2019-10-10 00:28:27.800843
+======Program End======
+
+=======Scraping For=======
+2019-10-10 00:30:17.827244
+
+2019-10-10 00:30:21.293852
+======Program End======

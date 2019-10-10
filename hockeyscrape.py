@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 from sqlalchemy import create_engine
 
-DATABASE = 'mysql+pymysql://admin:hockeyhockey@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
+DATABASE = 'mysql+pymysql://user:password@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
 
 
 def scrape(date):

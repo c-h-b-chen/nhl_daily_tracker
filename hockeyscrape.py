@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 from sqlalchemy import create_engine
 
-DATABASE = 'mysql+pymysql://user:password@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
+DATABASE = 'mysql+pymysql://admin:hockeyhockey@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
 
 
 def scrape(date):
@@ -153,13 +153,14 @@ def scrape(date):
         "fol": fol,
         "fo%": fo_per,
         "total": total})
-    insert_db(df)
+    insert_db(df, table='daily')
 
-def insert_db(df, db=DATABASE):
+
+def insert_db(df, table, db=DATABASE):
     try:
         engine = create_engine(db, encoding='utf8')
         try:
-            df.to_sql('daily', con=engine, if_exists='append')
+            df.to_sql(table, con=engine, if_exists='append')
         except Exception as diag:
             print(diag.__class__.__name__, ': Unable to insert into database')
             print(diag)

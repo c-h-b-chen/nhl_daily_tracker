@@ -94,3 +94,16 @@ Unable to insert into database
 
 2019-10-10 00:30:21.293852
 ======Program End======
+
+=======Scraping For=======
+2019-10-11 18:29:19.102411
+OperationalError
+Unable to insert into database
+2019-10-11 18:29:24.946139
+======Program End======
+
+=======Scraping For=======
+2019-10-11 18:29:57.451630
+
+2019-10-11 18:30:02.358467
+======Program End======

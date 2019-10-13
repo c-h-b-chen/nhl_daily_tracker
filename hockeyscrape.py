@@ -156,11 +156,11 @@ def scrape(date):
     insert_db(df, table='daily')
 
 
-def insert_db(df, table, db=DATABASE):
+def insert_db(df, table, exists='append', db=DATABASE):
     try:
         engine = create_engine(db, encoding='utf8')
         try:
-            df.to_sql(table, con=engine, if_exists='append')
+            df.to_sql(table, con=engine, if_exists=exists)
         except Exception as diag:
             print(diag.__class__.__name__, ': Unable to insert into database')
             print(diag)

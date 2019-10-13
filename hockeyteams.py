@@ -3,16 +3,28 @@ from hockeyscrape import insert_db
 import yahoo_fantasy_api as yfa
 import pandas as pd
 
-#Authenticate -> game -> league -> team
-#Insert
+# Authenticate -> game -> league -> team
+# Insert
 #
-#
 
-def login():
-    oauth = OAuth2(None, None, from_file='oauth2.json')
-    if not oauth.token_is_valid():
-        oauth.refresh_access_token()
 
-def create_table(tablename, df):
+def fill_tables(sc):
+    gm = yfa.Game(sc, 'nhl')
+    lg = gm.to_league(gm.league_ids(year=2019)[0])
+    dummies = lg.teams()
 
-def 
+    # cleaning names for valid table entry
+    for team in dummies:
+        team['name'] = team['name'].replace(" ", "_")
+        roster = lg.to_team(team['team_key']).roster()
+        df = pd.DataFrame(roster)
+        df['position'] = df['eligible_positions'].apply('/'.join)
+        df.drop(['eligible_positions'], inplace=True, axis=1)
+        insert_db(df, team['name'], 'replace')
+
+
+oauth = OAuth2(None, None, from_file='../oauth2.json')
+if not oauth.token_is_valid():
+    oauth.refresh_access_token()
+
+fill_tables(oauth)

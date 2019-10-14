@@ -12,15 +12,19 @@ def fill_tables(sc):
     gm = yfa.Game(sc, 'nhl')
     lg = gm.to_league(gm.league_ids(year=2019)[0])
     dummies = lg.teams()
+    table_df = pd.DataFrame()
 
     # cleaning names for valid table entry
     for team in dummies:
         team['name'] = team['name'].replace(" ", "_")
         roster = lg.to_team(team['team_key']).roster()
         df = pd.DataFrame(roster)
+        df['owner'] = team['name']
         df['position'] = df['eligible_positions'].apply('/'.join)
         df.drop(['eligible_positions'], inplace=True, axis=1)
-        insert_db(df, team['name'], 'replace')
+        table_df = table_df.append(df, ignore_index=True)
+
+    insert_db(table_df, 'league', 'replace')
 
 
 oauth = OAuth2(None, None, from_file='../oauth2.json')

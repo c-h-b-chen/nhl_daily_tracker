@@ -107,3 +107,22 @@ Unable to insert into database
 
 2019-10-11 18:30:02.358467
 ======Program End======
+InternalError
+Unable to insert into databaseNameError
+Unable to insert into databaseValueError
+Unable to insert into databaseInternalError
+Unable to insert into databaseTypeError
+Unable to insert into databaseInternalError
+Unable to insert into databaseInternalError
+Unable to insert into databaseProgrammingError
+Unable to insert into databaseInternalError
+Unable to insert into databaseProgrammingError
+Unable to insert into database
+=======Scraping For=======
+2019-10-13 01:21:45.565889
+
+2019-10-13 01:21:48.946749
+======Program End======
+
+=======Scraping For=======
+2019-10-13 01:21:54.692742

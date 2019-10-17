@@ -20,6 +20,7 @@ def fill_tables(sc):
         roster = lg.to_team(team['team_key']).roster()
         df = pd.DataFrame(roster)
         df['owner'] = team['name']
+        df['team_key'] = team['team_key']
         df['position'] = df['eligible_positions'].apply('/'.join)
         df.drop(['eligible_positions'], inplace=True, axis=1)
         table_df = table_df.append(df, ignore_index=True)

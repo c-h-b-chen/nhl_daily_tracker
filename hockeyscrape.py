@@ -9,7 +9,7 @@ from selenium import webdriver
 
 USE_SELEN = False
 DATABASE = 'mysql+pymysql://user:pass@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
-
+BASE_URL = 'https://www.hockey-reference.com/friv/dailyleaders.fcgi?month='
 
 def chrome_scrape(urlstring, date):
     driver = webdriver.Chrome('../chromedriver')
@@ -21,15 +21,14 @@ def chrome_scrape(urlstring, date):
     csv_btn.click()
     csv = driver.find_element_by_id('csv_skaters').text
 
-    df = pd.read_csv(pd.compat.StringIO(csv), header=1) # change header
+    df = pd.read_csv(pd.compat.StringIO(csv), header=1)   # change header
 
-    clean(df)
+    return clean(df)
 
     # Rename the columns
     # Drop boxscore
     # Re Map
     # Convert type
-    # 
 
 
 def soup(urlstring, date):
@@ -53,10 +52,10 @@ def soup(urlstring, date):
         records.append(stats)
     df = pd.DataFrame(data, columns=['date', 'rank', 'player', 'position', 'team', 'home', 'opp', 'win', 'boxscore', 'goals', 'assists', 'points', '+/-', 'pim', 'ev_goals',
                                      'pp_goals', 'sh_goals', 'gw_goals', 'ev_assists', 'pp_assists', 'sh_assists', 'sog', 'shoot%', 'shifts', 'toi', 'hit', 'blk', 'fow', 'fol', 'fo%'])
-    clean(df)
+    return clean(df)
 
 
-def clean_df(df)
+def clean_df(df):
     df.drop(columns=['boxscore'], inplace=True)
 
     homemap = {'@': 0, '': 1, 'W': 1, 'L': 0}
@@ -70,15 +69,7 @@ def clean_df(df)
     df[['blk', 'hit', 'sog']] = df[['blk', 'hit', 'sog']].fillna(0)
     df['total'] = df.apply(lambda row: 3 * row['goals'] + 2 * (row['assists'] + row['sh_assists'] + row['sh_goals']) + .3 * (row['+/-'] + row['sog'] + row['hit']) + .5 * (row['pim'] + row['pp_goals'] + row['pp_assists'] + row['blk']), axis=1)
 
-    return df
-
-def scrape(date):
-    urlstring = 'https://www.hockey-reference.com/friv/dailyleaders.fcgi?month=' + \
-                date[0] + "&day=" + date[1] + "&year=20" + date[2]
-
-    df = chrome_scrape(urlstring, date) if USE_SELEN else soup(urlstring, date)
-
-    insert_db(df, table='daily')
+    insert_db(df)
 
 
 def insert_db(df, table, exists='append', db=DATABASE):
@@ -111,7 +102,6 @@ def main():
     x = datetime.datetime.today() - datetime.timedelta(1)
     date = x.strftime('%x').split('/')
 
-
     #To do
     try:
         elif len(sys.argv) == 4:
@@ -121,6 +111,12 @@ def main():
         log = open('log.txt', 'a')
         log.write('Ban input format\nProgram aborted')
         log.close()
+
+    urlstring = BASE_URL + date[0] + "&day=" + date[1] + "&year=20" + date[2]
+    df = chrome_scrape(urlstring, date) if USE_SELEN else soup(urlstring, date)
+    insert_db(df, table='daily')
+
+
     log = open('log.txt', 'a')
     log.write('\n' + str(datetime.datetime.today()) +
               '\n======Program End======\n')

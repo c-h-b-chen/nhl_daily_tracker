@@ -3,10 +3,6 @@ from hockeyscrape import insert_db
 import yahoo_fantasy_api as yfa
 import pandas as pd
 
-# Authenticate -> game -> league -> team
-# Insert
-#
-
 
 def fill_tables(sc):
     gm = yfa.Game(sc, 'nhl')

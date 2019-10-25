@@ -11,7 +11,10 @@ from selenium.webdriver.common.by import By
 
 
 USE_SELEN = False
-DATABASE = 'mysql+pymysql://admin:hockeyhockey@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
+LOG = '../nhl_log.txt'
+USER, PWD = open('../nhlcreds.txt', 'r').readlines()
+print(USER, PWD)
+DATABASE = 'mysql+pymysql://' + USER.strip() + ':' + PWD.strip() + '@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
 BASE_URL = 'https://www.hockey-reference.com/friv/dailyleaders.fcgi?month='
 
 
@@ -44,7 +47,7 @@ def soup(urlstring, date):
     except Exception as diag:
         print('Bad URL string: ')
         print(urlstring)
-        log = open('log.txt', 'a')
+        log = open(LOG, 'a')
         log.write(str(diag.__class__.__name__) + ':' + str(diag))
         log.close()
 
@@ -91,13 +94,13 @@ def insert_db(df, table, exists='append', db=DATABASE):
         except Exception as diag:
             print(diag.__class__.__name__, ': Unable to insert into database')
             print(diag)
-            log = open('log.txt', 'a')
+            log = open(LOG, 'a')
             log.write(str(diag.__class__.__name__))
             log.write('\nUnable to insert into database')
             log.close()
     except Exception as diag:
         print(diag, ": Unable to connect to database")
-        log = open('log.txt', 'a')
+        log = open(LOG, 'a')
         log.write(str(diag.__class__.__name__) + ':' + str(diag))
         log.write('Unable to connect into database')
         log.close()
@@ -105,31 +108,32 @@ def insert_db(df, table, exists='append', db=DATABASE):
 
 def main():
 
-    # log = open('log.txt', 'a')
-    # log.write('\n=======Scraping For=======\n' +
-    #           str(datetime.datetime.today()) + '\n')
-    # log.close()
+    log = open(LOG, 'a')
+    log.write('\n=======Scraping For=======\n' +
+              str(datetime.datetime.today()) + '\n')
+    log.close()
 
-    # x = datetime.datetime.today() - datetime.timedelta(1)
-    # entry_date = x.strftime('%x').split('/')
+    x = datetime.datetime.today() - datetime.timedelta(1)
+    entry_date = x.strftime('%x').split('/')
 
-    # if len(sys.argv) == 4:
-    #     entry_date = sys.argv[1:]
-    for i in range(2, 23):
-        entry_date = ['10', '0' + str(i), '19'] if i < 10 else ['10', str(i), '19']
-        urlstring = BASE_URL + entry_date[0] + "&day=" + \
-            entry_date[1] + "&year=20" + entry_date[2]
-        print('Entry for ', entry_date)
-        chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
+    if len(sys.argv) == 4:
+        entry_date = sys.argv[1:]
 
-    # urlstring = BASE_URL + entry_date[0] + "&day=" + \
-    #     entry_date[1] + "&year=20" + entry_date[2]
-    # chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
+    # for i in range(2, 23):
+        # entry_date = ['10', '0' + str(i), '19'] if i < 10 else ['10', str(i), '19']
+        # urlstring = BASE_URL + entry_date[0] + "&day=" + \
+        #     entry_date[1] + "&year=20" + entry_date[2]
+        # print('Entry for ', entry_date)
+        # chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
 
-    # log = open('log.txt', 'a')
-    # log.write('\n' + str(datetime.datetime.today()) +
-    #           '\n======Program End======\n')
-    # log.close()
+    urlstring = BASE_URL + entry_date[0] + "&day=" + \
+        entry_date[1] + "&year=20" + entry_date[2]
+    chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
+
+    log = open(LOG, 'a')
+    log.write('\n' + str(datetime.datetime.today()) +
+              '\n======Program End======\n')
+    log.close()
 
 
 if __name__ == '__main__':

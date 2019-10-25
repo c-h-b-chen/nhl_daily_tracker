@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
 
-USE_SELEN = True
-DATABASE = 'mysql+pymysql://user:pass@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
+USE_SELEN = False
+DATABASE = 'mysql+pymysql://admin:hockeyhockey@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
 BASE_URL = 'https://www.hockey-reference.com/friv/dailyleaders.fcgi?month='
 
 
@@ -65,12 +65,15 @@ def soup(urlstring, date):
 def clean(df):
     df.drop(columns=['boxscore'], inplace=True)
 
-    homemap = {'@': 0, '': 1, 'W': 1, 'L': 0, 'L-OT': 0}
+    homemap = {'@': 0, '': 1, None: 1}
     df['home'] = df['home'].map(homemap)
-    df['win'] = df['win'].map(homemap)
-    df.iloc[:, 7:23] = df.iloc[:, 7:23].apply(pd.to_numeric)
-    df.iloc[:, 24:] = df.iloc[:, 24:].apply(pd.to_numeric)
-    df[['date']] = df[['date']].apply(pd.to_datetime)
+
+    def soi(toi):
+        minutes, seconds = toi.split(':')
+        return int(minutes) * 60 + int(seconds)
+    df['toi'] = df['toi'].apply(lambda x: soi(x))
+    df.iloc[:, 8:] = df.iloc[:, 8:].apply(pd.to_numeric)
+    #df[['date']] = df[['date']].apply(pd.to_datetime)
     df['rank'] = pd.to_numeric(df['rank'])
 
     df[['blk', 'hit', 'sog']] = df[['blk', 'hit', 'sog']].fillna(0)
@@ -84,7 +87,7 @@ def insert_db(df, table, exists='append', db=DATABASE):
     try:
         engine = create_engine(db, encoding='utf8')
         try:
-            df.to_sql(table, con=engine, if_exists=exists)
+            df.to_sql(table, con=engine, if_exists=exists, index=False)
         except Exception as diag:
             print(diag.__class__.__name__, ': Unable to insert into database')
             print(diag)
@@ -102,25 +105,31 @@ def insert_db(df, table, exists='append', db=DATABASE):
 
 def main():
 
-    log = open('log.txt', 'a')
-    log.write('\n=======Scraping For=======\n' +
-              str(datetime.datetime.today()) + '\n')
-    log.close()
+    # log = open('log.txt', 'a')
+    # log.write('\n=======Scraping For=======\n' +
+    #           str(datetime.datetime.today()) + '\n')
+    # log.close()
 
-    x = datetime.datetime.today() - datetime.timedelta(1)
-    entry_date = x.strftime('%x').split('/')
+    # x = datetime.datetime.today() - datetime.timedelta(1)
+    # entry_date = x.strftime('%x').split('/')
 
-    if len(sys.argv) == 4:
-        entry_date = sys.argv[1:]
+    # if len(sys.argv) == 4:
+    #     entry_date = sys.argv[1:]
+    for i in range(2, 23):
+        entry_date = ['10', '0' + str(i), '19'] if i < 10 else ['10', str(i), '19']
+        urlstring = BASE_URL + entry_date[0] + "&day=" + \
+            entry_date[1] + "&year=20" + entry_date[2]
+        print('Entry for ', entry_date)
+        chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
 
-    urlstring = BASE_URL + entry_date[0] + "&day=" + \
-        entry_date[1] + "&year=20" + entry_date[2]
-    chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
+    # urlstring = BASE_URL + entry_date[0] + "&day=" + \
+    #     entry_date[1] + "&year=20" + entry_date[2]
+    # chrome_scrape(urlstring, entry_date) if USE_SELEN else soup(urlstring, entry_date)
 
-    log = open('log.txt', 'a')
-    log.write('\n' + str(datetime.datetime.today()) +
-              '\n======Program End======\n')
-    log.close()
+    # log = open('log.txt', 'a')
+    # log.write('\n' + str(datetime.datetime.today()) +
+    #           '\n======Program End======\n')
+    # log.close()
 
 
 if __name__ == '__main__':

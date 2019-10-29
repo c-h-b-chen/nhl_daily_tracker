@@ -13,7 +13,6 @@ from selenium.webdriver.common.by import By
 USE_SELEN = False
 LOG = '../nhl_log.txt'
 USER, PWD = open('../nhlcreds.txt', 'r').readlines()
-print(USER, PWD)
 DATABASE = 'mysql+pymysql://' + USER.strip() + ':' + PWD.strip() + '@hockey-1.cgk9rffkqlbn.us-east-1.rds.amazonaws.com/hockey?charset=utf8'
 BASE_URL = 'https://www.hockey-reference.com/friv/dailyleaders.fcgi?month='
 
